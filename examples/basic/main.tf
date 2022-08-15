@@ -1,4 +1,4 @@
-module "MOD_SHORTNAME" {
+module "elasticache-redis-standalone" {
   source = "../.."
 
   organization = var.organization

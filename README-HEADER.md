@@ -1,4 +1,4 @@
-# PBS TF MOD_TITLE
+# PBS TF ElastiCache Redis Standalone Module
 
 ## Installation
 
@@ -7,7 +7,7 @@
 Use this URL for the source of the module. See the usage examples below for more details.
 
 ```hcl
-github.com/pbs/terraform-aws-MOD_NAME?ref=x.y.z
+github.com/pbs/terraform-aws-elasticache-redis-standalone-module?ref=x.y.z
 ```
 
 ### Alternative Installation Methods
@@ -17,15 +17,17 @@ More information can be found on these install methods and more in [the document
 ## Usage
 
 <!-- TODO -->
+
 This should be a basic description of what this module does.
 Fill this out before completing usage of this template.
+
 <!-- TODO -->
 
 Integrate this module like so:
 
 ```hcl
-module "MOD_SHORTNAME" {
-  source = "github.com/pbs/terraform-aws-MOD_NAME?ref=x.y.z"
+module "elasticache-redis-standalone" {
+  source = "github.com/pbs/terraform-aws-elasticache-redis-standalone-module?ref=x.y.z"
 
   <!-- TODO -->
   Show some examples of valid values for required parameters.

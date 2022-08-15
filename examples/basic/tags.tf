@@ -13,7 +13,7 @@ variable "environment" {
 variable "product" {
   description = "Tag used to group resources according to application"
 
-  default = "example-tf-MOD_SHORTNAME-basic"
+  default = "example-tf-elasticache-redis-standalone-basic"
 
   validation {
     condition     = can(regex("[a-z\\-]+", var.product))
@@ -24,7 +24,7 @@ variable "product" {
 variable "repo" {
   description = "Tag used to point to the repo using this module"
 
-  default = "https://github.com/pbs/terraform-MOD_NAME.git"
+  default = "https://github.com/pbs/terraform-elasticache-redis-standalone-module.git"
 
   validation {
     condition     = can(regex("(?:git|ssh|https?|git@[-\\w.]+):(\\/\\/)?(.*?)(\\.git)(\\/?|\\#[-\\d\\w._]+?)$", var.repo))

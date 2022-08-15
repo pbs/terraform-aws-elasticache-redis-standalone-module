@@ -1,4 +1,4 @@
 output "hello_world" {
   description = "Hello World"
-  value       = module.MOD_SHORTNAME.hello_world
+  value       = module.elasticache-redis-standalone.hello_world
 }

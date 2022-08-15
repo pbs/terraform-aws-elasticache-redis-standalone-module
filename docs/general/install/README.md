@@ -11,8 +11,8 @@ All the techniques for installing modules are based around the ways that Terrafo
 Assuming you don't have manual modifications that you need to make to serve the purposes of an application, the most convenient method of integrating modules might be by using the repo source of this module like so:
 
 ```hcl
-module "MOD_SHORTNAME" {
-    source = "github.com/pbs/terraform-MOD_NAME?ref=x.y.z"
+module "elasticache-redis-standalone" {
+    source = "github.com/pbs/terraform-elasticache-redis-standalone-module?ref=x.y.z"
 }
 ```
 
@@ -29,9 +29,9 @@ Note that the provider being used might also have availability or security impli
 You can install the minified module directly in your repo manually like so:
 
 ```bash
-mkdir -p 'terraform/modules/MOD_SHORTNAME'
-gh -R 'pbs/terraform-MOD_NAME' release download -p 'release.tar.gz' x.y.z
-tar -xvf release.tar.gz -C 'terraform/modules/MOD_SHORTNAME'
+mkdir -p 'terraform/modules/elasticache-redis-standalone'
+gh -R 'pbs/terraform-elasticache-redis-standalone-module' release download -p 'release.tar.gz' x.y.z
+tar -xvf release.tar.gz -C 'terraform/modules/elasticache-redis-standalone'
 rm -f release.tar.gz
 ```
 
@@ -46,14 +46,14 @@ Please [read this][atlassian-subtree] for information about Git Subtrees, as tha
 The simplest use case would work like so:
 
 ```bash
-git remote add -f MOD_SHORTNAME git@github.com:pbs/terraform-MOD_NAME.git
-git subtree add --prefix terraform/modules/MOD_SHORTNAME MOD_SHORTNAME main --squash
+git remote add -f elasticache-redis-standalone git@github.com:pbs/terraform-elasticache-redis-standalone-module.git
+git subtree add --prefix terraform/modules/elasticache-redis-standalone elasticache-redis-standalone main --squash
 ```
 
 If necessary, pin the repo version, rather than adding `main` as your subtree:
 
 ```bash
-git subtree add --prefix terraform/modules/MOD_SHORTNAME MOD_SHORTNAME $REF --squash
+git subtree add --prefix terraform/modules/elasticache-redis-standalone elasticache-redis-standalone $REF --squash
 ```
 
 Where `$REF` is a commit SHA, tag, or branch name.
