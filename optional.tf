@@ -17,15 +17,9 @@ variable "apply_immediately" {
 }
 
 variable "auto_minor_version_upgrade" {
-  description = "Specifies whether minor version engine upgrades will be applied automatically to the underlying Cache Cluster instances during the maintenance window. Only supported for engine type \"redis\" and if the engine version is 6 or higher."
+  description = "Specifies whether minor version engine upgrades will be applied automatically to the underlying nodes during the maintenance window. Only supported for engine type \"redis\" and if the engine version is 6 or higher."
   default     = true
   type        = bool
-}
-
-variable "availability_zone" {
-  description = "Availability Zone for the cache cluster. If you want to create cache nodes in multi-az, use preferred_availability_zones instead. Default: System chosen Availability Zone. Changing this value will re-create the resource."
-  default     = null
-  type        = string
 }
 
 variable "engine_version" {
@@ -41,7 +35,7 @@ variable "final_snapshot_identifier" {
 }
 
 variable "maintenance_window" {
-  description = "Specifies the weekly time range for when maintenance on the cache cluster is performed. The format is ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period. Example: sun:05:00-sun:09:00."
+  description = "Specifies the weekly time range for when maintenance on the cluster is performed. The format is ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period. Example: sun:05:00-sun:09:00."
   default     = null
   type        = string
 }
@@ -59,7 +53,7 @@ variable "port" {
 }
 
 variable "security_group_ids" {
-  description = "One or more VPC security groups associated with the cache cluster. If null, use the one provided by this module."
+  description = "One or more VPC security groups associated with the nodes. If null, use the one provided by this module."
   default     = null
   type        = list(string)
 }
@@ -70,26 +64,20 @@ variable "snapshot_arns" {
   type        = list(string)
 }
 
-variable "snapshot_name" {
-  description = "Name of a snapshot from which to restore data into the new node group. Changing snapshot_name forces a new resource."
-  default     = null
-  type        = string
-}
-
 variable "snapshot_retention_limit" {
-  description = "Number of days for which ElastiCache will retain automatic cache cluster snapshots before deleting them. For example, if you set SnapshotRetentionLimit to 5, then a snapshot that was taken today will be retained for 5 days before being deleted. If the value of SnapshotRetentionLimit is set to zero (0), backups are turned off. Please note that setting a snapshot_retention_limit is not supported on cache.t1.micro cache nodes."
+  description = "Number of days for which ElastiCache will retain automatic cluster snapshots before deleting them. For example, if you set SnapshotRetentionLimit to 5, then a snapshot that was taken today will be retained for 5 days before being deleted. If the value of SnapshotRetentionLimit is set to zero (0), backups are turned off. Please note that setting a snapshot_retention_limit is not supported on cache.t1.micro cache nodes."
   default     = null
   type        = number
 }
 
 variable "snapshot_window" {
-  description = "Daily time range (in UTC) during which ElastiCache will begin taking a daily snapshot of your cache cluster. Example: 05:00-09:00"
+  description = "Daily time range (in UTC) during which ElastiCache will begin taking a daily snapshot of your nodes. Example: 05:00-09:00"
   default     = null
   type        = string
 }
 
 variable "subnet_group_name" {
-  description = "Name of the subnet group to be used for the cache cluster. Changing this value will re-create the resource. If null, will use the subnet group created by this module."
+  description = "Name of the subnet group to be used for the cluster. Changing this value will re-create the resource. If null, will use the subnet group created by this module."
   default     = null
   type        = string
 }
@@ -101,7 +89,7 @@ variable "parameters" {
 }
 
 variable "vpc_id" {
-  description = "VPC ID to create the cache cluster in. If null, one will be guessed based on `vpc_data_lookup_tags`."
+  description = "VPC ID to create the nodes in. If null, one will be guessed based on `vpc_data_lookup_tags`."
   default     = null
   type        = string
 }
@@ -121,10 +109,7 @@ variable "subnets" {
 variable "subnet_data_lookup_filters" {
   description = "Values of the `filter` blocks in the `aws_subnets` data source used in this module. If null, one will be guessed using the resolved VPC and a `Name` filter of `*-private-*`. Ignored if `subnets` is populated."
   default     = null
-  type = list(object({
-    name   = string
-    values = list(string)
-  }))
+  type        = map(any)
 }
 
 variable "use_prefix" {
@@ -134,7 +119,97 @@ variable "use_prefix" {
 }
 
 variable "sg_name" {
-  description = "Name of the security group to be created. If null, will use the name of the cache cluster."
+  description = "Name of the security group to be created. If null, will use the name of the nodes."
   default     = null
+  type        = string
+}
+
+variable "replication_group_description" {
+  description = "Description of the replication group to be created. If null, one will be generated using the name of the nodes."
+  default     = null
+  type        = string
+}
+
+variable "replication_group_id" {
+  description = "Replication group identifier. This parameter is stored as a lowercase string. If null, the name of the nodes will be used."
+  default     = null
+  type        = string
+}
+
+variable "at_rest_encryption_enabled" {
+  description = "Whether to enable encryption at rest. Because there is a performance hit to enabling this feature, the default is false. Consider setting to true if your application can tolerate it."
+  default     = false
+  type        = bool
+}
+
+variable "auth_token" {
+  description = "Password used to access a password protected server. Can be specified only if transit_encryption_enabled = true."
+  default     = null
+  type        = string
+}
+
+variable "automatic_failover_enabled" {
+  description = "Specifies whether a read-only replica will be automatically promoted to read/write primary if the existing primary fails. If null, will be enabled if `nodes` > 1. If true, `nodes` must be greater than 1."
+  default     = null
+  type        = bool
+}
+
+variable "data_tiering_enabled" {
+  description = "Enables data tiering. Data tiering is only supported for replication groups using the r6gd node type. This parameter must be set to true when using r6gd nodes."
+  default     = false
+  type        = bool
+}
+
+variable "parameter_group_name" {
+  description = "Name of the parameter group to be created. If null, one will be created using the name of the cluster."
+  default     = null
+  type        = string
+}
+
+variable "user_group_ids" {
+  description = "User Group ID to associate with the replication group. Only a maximum of one (1) user group ID is valid. NOTE: This argument is a set because the AWS specification allows for multiple IDs. However, in practice, AWS only allows a maximum size of one."
+  default     = null
+  type        = list(string)
+}
+
+variable "transit_encryption_enabled" {
+  description = "Whether to enable encryption at rest. Because there is a performance hit to enabling this feature, the default is false. Consider setting to true if your application can tolerate it."
+  default     = false
+  type        = bool
+}
+
+variable "preferred_cache_cluster_azs" {
+  description = "List of availability zones in which to create cluster."
+  default     = null
+  type        = list(string)
+}
+
+variable "nodes" {
+  description = "Number of nodes (primary and replicas) this replication group will have. If Multi-AZ is enabled, the value of this parameter must be at least 2. Updates will occur before other modifications. Conflicts with num_node_groups, the deprecatednumber_cache_clusters, or the deprecated cluster_mode."
+  default     = 2
+  type        = number
+}
+
+variable "multi_az_enabled" {
+  description = "Whether to enable Multi-AZ. If Multi-AZ is enabled, the value of nodes must be at least 2."
+  default     = false
+  type        = bool
+}
+
+variable "kms_key_id" {
+  description = "The ARN of the key that you wish to use if encrypting at rest. If not supplied, uses service managed encryption. Can be specified only if at_rest_encryption_enabled = true."
+  default     = null
+  type        = string
+}
+
+variable "global_replication_group_id" {
+  description = "The ID of the global replication group to which this replication group should belong. If this parameter is specified, the replication group is added to the specified global replication group as a secondary replication group; otherwise, the replication group is not part of any global replication group. If global_replication_group_id is set, the num_node_groups parameter cannot be set."
+  default     = null
+  type        = string
+}
+
+variable "parameter_group_version" {
+  description = "The major + minor version being used for the application when creating a parameter group."
+  default     = "6.x"
   type        = string
 }

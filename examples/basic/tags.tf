@@ -13,7 +13,7 @@ variable "environment" {
 variable "product" {
   description = "Tag used to group resources according to application"
 
-  default = "example-tf-elasticache-redis-standalone-basic"
+  default = "ex-tf-redis-basic"
 
   validation {
     condition     = can(regex("[a-z\\-]+", var.product))

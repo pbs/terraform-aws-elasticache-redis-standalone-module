@@ -1,6 +1,6 @@
-resource "aws_elasticache_parameter_group" "elasticache_parameter_group" {
+resource "aws_elasticache_parameter_group" "parameter_group" {
   name   = local.name
-  family = "${local.engine}-${replace(var.engine_version, "/\\.[\\d]+$/", "")}"
+  family = "${local.engine}${var.parameter_group_version}"
 
   description = "ElastiCache parameter group for ${local.name} ${local.engine}"
 
