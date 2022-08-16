@@ -1,4 +1,3 @@
-
 resource "aws_security_group" "sg" {
   description = "Controls access to the ${local.name} redis cluster"
 
