@@ -16,22 +16,15 @@ More information can be found on these install methods and more in [the document
 
 ## Usage
 
-<!-- TODO -->
+Provisions an Elasticache Redis (Cluster Mode Disabled) cluster.
 
-This should be a basic description of what this module does.
-Fill this out before completing usage of this template.
-
-<!-- TODO -->
+By default, it will provision one writer and one reader node, but that can be adjusted by setting the `nodes` variable to a different value.
 
 Integrate this module like so:
 
 ```hcl
 module "elasticache-redis-standalone" {
   source = "github.com/pbs/terraform-aws-elasticache-redis-standalone-module?ref=x.y.z"
-
-  <!-- TODO -->
-  Show some examples of valid values for required parameters.
-  <!-- TODO -->
 
   # Tagging Parameters
   organization = var.organization
