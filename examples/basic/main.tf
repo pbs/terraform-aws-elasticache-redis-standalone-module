@@ -1,4 +1,4 @@
-module "MOD_SHORTNAME" {
+module "redis" {
   source = "../.."
 
   organization = var.organization

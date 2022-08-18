@@ -1,4 +1,4 @@
-# PBS TF MOD_TITLE
+# PBS TF ElastiCache Redis Standalone Module
 
 ## Installation
 
@@ -7,7 +7,7 @@
 Use this URL for the source of the module. See the usage examples below for more details.
 
 ```hcl
-github.com/pbs/terraform-aws-MOD_NAME?ref=x.y.z
+github.com/pbs/terraform-aws-elasticache-redis-standalone-module?ref=x.y.z
 ```
 
 ### Alternative Installation Methods
@@ -16,20 +16,17 @@ More information can be found on these install methods and more in [the document
 
 ## Usage
 
-<!-- TODO -->
-This should be a basic description of what this module does.
-Fill this out before completing usage of this template.
-<!-- TODO -->
+Provisions an Elasticache Redis cluster (with Cluster Mode Disabled).
+
+> ℹ️ Note the confusing terminology around `Cluster Mode`. The `Cluster Mode` setting is a Redis feature that allows data to be sharded among nodes in a cluster, and requires some additional configuration to connect with it correctly. A Redis cluster that does not have `Cluster Mode` enabled is a set of standalone Redis nodes that have a single primary node for reading and writing and replica nodes for reading.
+
+By default, it will provision one writer and one reader node, but that can be adjusted by setting the `nodes` variable to a different value.
 
 Integrate this module like so:
 
 ```hcl
-module "MOD_SHORTNAME" {
-  source = "github.com/pbs/terraform-aws-MOD_NAME?ref=x.y.z"
-
-  <!-- TODO -->
-  Show some examples of valid values for required parameters.
-  <!-- TODO -->
+module "elasticache-redis-standalone" {
+  source = "github.com/pbs/terraform-aws-elasticache-redis-standalone-module?ref=x.y.z"
 
   # Tagging Parameters
   organization = var.organization

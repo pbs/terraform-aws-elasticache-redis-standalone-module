@@ -1,4 +1,4 @@
-module github.com/pbs/terraform-aws-MOD_NAME
+module github.com/pbs/terraform-aws-elasticache-redis-standalone-module
 
 go 1.13
 

@@ -1,5 +1,30 @@
 locals {
-  name    = var.name != null ? var.name : var.product
+  name                 = var.name != null ? var.name : var.product
+  security_group_ids   = var.security_group_ids != null ? var.security_group_ids : [aws_security_group.sg.id]
+  subnet_group_name    = var.subnet_group_name != null ? var.subnet_group_name : aws_elasticache_subnet_group.subnet_group.id
+  vpc_id               = var.vpc_id != null ? var.vpc_id : data.aws_vpc.vpc[0].id
+  subnets              = var.subnets != null ? var.subnets : data.aws_subnets.private_subnets[0].ids
+  parameter_group_name = var.parameter_group_name != null ? var.parameter_group_name : aws_elasticache_parameter_group.parameter_group.id
+
+  vpc_data_lookup_tags = var.vpc_data_lookup_tags != null ? var.vpc_data_lookup_tags : {
+    "environment" : var.environment
+  }
+
+  subnet_data_lookup_filters = var.subnet_data_lookup_filters != null ? var.subnet_data_lookup_filters : {
+    "vpc-id"   = [local.vpc_id]
+    "tag:Name" = ["*-private-*"]
+  }
+
+  replication_group_description = var.replication_group_description != null ? var.replication_group_description : "Replication group for ${local.name}"
+  replication_group_id          = var.replication_group_id != null ? var.replication_group_id : local.name
+
+  sg_name        = var.use_prefix ? null : var.sg_name != null ? var.sg_name : local.name
+  sg_name_prefix = var.use_prefix ? var.sg_name != null ? var.sg_name : local.name : null
+
+  automatic_failover_enabled = var.automatic_failover_enabled != null ? var.automatic_failover_enabled : var.nodes >= 2
+
+  engine = "redis"
+
   creator = "terraform"
 
   tags = merge(
