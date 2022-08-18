@@ -21,7 +21,7 @@ locals {
   sg_name        = var.use_prefix ? null : var.sg_name != null ? var.sg_name : local.name
   sg_name_prefix = var.use_prefix ? var.sg_name != null ? var.sg_name : local.name : null
 
-  automatic_failover_enabled = var.automatic_failover_enabled != null ? var.automatic_failover_enabled : var.nodes > 2
+  automatic_failover_enabled = var.automatic_failover_enabled != null ? var.automatic_failover_enabled : var.nodes >= 2
 
   engine = "redis"
 
