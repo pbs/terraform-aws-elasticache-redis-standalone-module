@@ -16,7 +16,9 @@ More information can be found on these install methods and more in [the document
 
 ## Usage
 
-Provisions an Elasticache Redis (Cluster Mode Disabled) cluster.
+Provisions an Elasticache Redis cluster (with Cluster Mode Disabled).
+
+> ℹ️ Note the confusing terminology around `Cluster Mode`. The `Cluster Mode` setting is a Redis feature that allows data to be sharded among nodes in a cluster, and requires some additional configuration to connect with it correctly. A Redis cluster that does not have `Cluster Mode` enabled is a set of standalone Redis nodes that have a single primary node for reading and writing and replica nodes for reading.
 
 By default, it will provision one writer and one reader node, but that can be adjusted by setting the `nodes` variable to a different value.
 
@@ -95,11 +97,13 @@ No modules.
 | <a name="input_auto_minor_version_upgrade"></a> [auto\_minor\_version\_upgrade](#input\_auto\_minor\_version\_upgrade) | Specifies whether minor version engine upgrades will be applied automatically to the underlying nodes during the maintenance window. Only supported for engine type "redis" and if the engine version is 6 or higher. | `bool` | `true` | no |
 | <a name="input_automatic_failover_enabled"></a> [automatic\_failover\_enabled](#input\_automatic\_failover\_enabled) | Specifies whether a read-only replica will be automatically promoted to read/write primary if the existing primary fails. If null, will be enabled if `nodes` > 1. If true, `nodes` must be greater than 1. | `bool` | `null` | no |
 | <a name="input_data_tiering_enabled"></a> [data\_tiering\_enabled](#input\_data\_tiering\_enabled) | Enables data tiering. Data tiering is only supported for replication groups using the r6gd node type. This parameter must be set to true when using r6gd nodes. | `bool` | `false` | no |
+| <a name="input_egress_cidr_blocks"></a> [egress\_cidr\_blocks](#input\_egress\_cidr\_blocks) | List of CIDR blocks to assign to the egress rule of the security group. If null, `egress_security_group_ids` must be used. | `list(string)` | <pre>[<br>  "10.0.0.0/8"<br>]</pre> | no |
+| <a name="input_egress_source_sg_id"></a> [egress\_source\_sg\_id](#input\_egress\_source\_sg\_id) | List of security group ID to assign to the egress rule of the security group. If null, `egress_cidr_blocks` must be used. | `string` | `null` | no |
 | <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | Version number of the cache engine to be used. If not set, defaults to the latest version. See Describe Cache Engine Versions in the AWS Documentation for supported versions. When engine is redis and the version is 6 or higher, the major and minor version can be set, e.g., 6.2, or the minor version can be unspecified which will use the latest version at creation time, e.g., 6.x. Otherwise, specify the full version desired, e.g., 5.0.6. | `string` | `null` | no |
 | <a name="input_final_snapshot_identifier"></a> [final\_snapshot\_identifier](#input\_final\_snapshot\_identifier) | Name of your final cluster snapshot. If omitted, no final snapshot will be made. | `string` | `null` | no |
 | <a name="input_global_replication_group_id"></a> [global\_replication\_group\_id](#input\_global\_replication\_group\_id) | The ID of the global replication group to which this replication group should belong. If this parameter is specified, the replication group is added to the specified global replication group as a secondary replication group; otherwise, the replication group is not part of any global replication group. If global\_replication\_group\_id is set, the num\_node\_groups parameter cannot be set. | `string` | `null` | no |
 | <a name="input_kms_key_id"></a> [kms\_key\_id](#input\_kms\_key\_id) | The ARN of the key that you wish to use if encrypting at rest. If not supplied, uses service managed encryption. Can be specified only if at\_rest\_encryption\_enabled = true. | `string` | `null` | no |
-| <a name="input_maintenance_window"></a> [maintenance\_window](#input\_maintenance\_window) | Specifies the weekly time range for when maintenance on the cluster is performed. The format is ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period. Example: sun:05:00-sun:09:00. | `string` | `null` | no |
+| <a name="input_maintenance_window"></a> [maintenance\_window](#input\_maintenance\_window) | Specifies the weekly time range for when maintenance on the cluster is performed. The format is ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period. Example: sun:05:00-sun:09:00. | `string` | `"mon:07:00-mon:08:00"` | no |
 | <a name="input_multi_az_enabled"></a> [multi\_az\_enabled](#input\_multi\_az\_enabled) | Whether to enable Multi-AZ. If Multi-AZ is enabled, the value of nodes must be at least 2. | `bool` | `false` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the ElastiCache Redis instance. If null, will default to product. | `string` | `null` | no |
 | <a name="input_node_type"></a> [node\_type](#input\_node\_type) | ElastiCache node type | `string` | `"cache.t3.micro"` | no |
