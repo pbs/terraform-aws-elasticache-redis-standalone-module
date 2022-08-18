@@ -36,7 +36,7 @@ variable "final_snapshot_identifier" {
 
 variable "maintenance_window" {
   description = "Specifies the weekly time range for when maintenance on the cluster is performed. The format is ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period. Example: sun:05:00-sun:09:00."
-  default     = null
+  default     = "mon:07:00-mon:08:00"
   type        = string
 }
 
@@ -211,5 +211,17 @@ variable "global_replication_group_id" {
 variable "parameter_group_version" {
   description = "The major + minor version being used for the application when creating a parameter group."
   default     = "6.x"
+  type        = string
+}
+
+variable "egress_cidr_blocks" {
+  description = "List of CIDR blocks to assign to the egress rule of the security group. If null, `egress_security_group_ids` must be used."
+  default     = ["10.0.0.0/8"]
+  type        = list(string)
+}
+
+variable "egress_source_sg_id" {
+  description = "List of security group ID to assign to the egress rule of the security group. If null, `egress_cidr_blocks` must be used."
+  default     = null
   type        = string
 }

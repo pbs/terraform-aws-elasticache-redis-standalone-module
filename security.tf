@@ -9,10 +9,11 @@ resource "aws_security_group" "sg" {
 }
 
 resource "aws_security_group_rule" "egress" {
-  type              = "egress"
-  protocol          = "tcp"
-  from_port         = var.port
-  to_port           = var.port
-  cidr_blocks       = ["10.0.0.0/8"]
-  security_group_id = aws_security_group.sg.id
+  type                     = "egress"
+  protocol                 = "tcp"
+  from_port                = var.port
+  to_port                  = var.port
+  source_security_group_id = var.egress_source_sg_id
+  cidr_blocks              = var.egress_cidr_blocks
+  security_group_id        = aws_security_group.sg.id
 }
