@@ -1,15 +1,18 @@
 package test
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"testing"
 
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/lambda"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/stretchr/testify/assert"
 )
 
-func testTemplate(t *testing.T, variant string) {
+func testRedis(t *testing.T, variant string) {
 	t.Parallel()
 
 	terraformDir := fmt.Sprintf("../examples/%s", variant)
@@ -50,4 +53,46 @@ func testTemplate(t *testing.T, variant string) {
 	assert.Equal(t, expectedMemberClusters, memberClusters)
 	assert.Contains(t, primaryEndpointAddress, expectedPartialPrimaryEndpointAddress)
 	assert.Contains(t, readerEndpointAddress, expectedPartialReaderEndpointAddress)
+
+	if variant == "lambda" {
+		expectedLambdaName := expectedName
+		lambdaName := terraform.Output(t, terraformOptions, "lambda_name")
+		assert.Equal(t, expectedLambdaName, lambdaName)
+
+		session, err := session.NewSession()
+		if err != nil {
+			t.Fatalf("Failed to create AWS session: %v", err)
+		}
+
+		lambdaSvc := lambda.New(session)
+
+		invokeOutput, err := lambdaSvc.Invoke(&lambda.InvokeInput{
+			FunctionName: &lambdaName,
+		})
+
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		var lambdaResp struct {
+			Result string `json:"result"`
+			Error  string `json:"error"`
+		}
+
+		err = json.Unmarshal(invokeOutput.Payload, &lambdaResp)
+
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if *invokeOutput.StatusCode != 200 {
+			t.Logf("lambda response: %v", lambdaResp)
+			t.Fatalf("Expected status code 200, got %d", *invokeOutput.StatusCode)
+		}
+
+		if lambdaResp.Result == "failure" {
+			t.Logf("lambda response: %v", lambdaResp)
+			t.Fatalf("Expected result 'success', got 'failure'")
+		}
+	}
 }
