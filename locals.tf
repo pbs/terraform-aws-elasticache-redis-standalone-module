@@ -5,6 +5,8 @@ locals {
   vpc_id               = var.vpc_id != null ? var.vpc_id : data.aws_vpc.vpc[0].id
   subnets              = var.subnets != null ? var.subnets : data.aws_subnets.private_subnets[0].ids
   parameter_group_name = var.parameter_group_name != null ? var.parameter_group_name : aws_elasticache_parameter_group.parameter_group.id
+  cname                = var.cname != null ? var.cname : "${local.name}-cache"
+  private_hosted_zone  = var.create_dns ? data.aws_route53_zone.private_hosted_zone[0].zone_id : null
 
   vpc_data_lookup_tags = var.vpc_data_lookup_tags != null ? var.vpc_data_lookup_tags : {
     "environment" : var.environment

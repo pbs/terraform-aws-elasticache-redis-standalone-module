@@ -22,6 +22,8 @@ Provisions an Elasticache Redis cluster (with Cluster Mode Disabled).
 
 By default, it will provision one writer and one reader node, but that can be adjusted by setting the `nodes` variable to a different value.
 
+This module also assumes that connections are established through a private DNS record created in Route53. This makes it so that replacement of the ElastiCache cluster can be made in a fashion that is transparent to application configurations. This can be adjusted by setting `create_dns` to `false`.
+
 Integrate this module like so:
 
 ```hcl

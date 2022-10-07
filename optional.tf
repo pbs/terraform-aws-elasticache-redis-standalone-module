@@ -225,3 +225,27 @@ variable "egress_source_sg_id" {
   default     = null
   type        = string
 }
+
+variable "cname" {
+  description = "The value to use for the CNAME record if `create_dns` is true. The primary endpoint will be <cname>.<private_hosted_zone>, and the reader endpoint will be <cname>-ro.<private_hosted_zone>. If null, the name variable will be used instead."
+  default     = null
+  type        = string
+}
+
+variable "create_dns" {
+  description = "Whether to create DNS records for the primary and reader endpoints."
+  default     = true
+  type        = bool
+}
+
+variable "dns_ttl" {
+  description = "TTL for DNS records."
+  default     = 300
+  type        = number
+}
+
+variable "private_hosted_zone" {
+  description = "Private hosted zone to create DNS records in. If null, `create_dns` must be set to false."
+  default     = null
+  type        = string
+}

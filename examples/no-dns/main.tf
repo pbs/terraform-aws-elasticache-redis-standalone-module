@@ -1,7 +1,7 @@
 module "redis" {
   source = "../.."
 
-  private_hosted_zone = var.private_hosted_zone
+  create_dns = false
 
   organization = var.organization
   environment  = var.environment

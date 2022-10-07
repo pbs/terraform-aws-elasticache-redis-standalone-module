@@ -13,3 +13,9 @@ data "aws_subnets" "private_subnets" {
     }
   }
 }
+
+data "aws_route53_zone" "private_hosted_zone" {
+  count        = var.create_dns ? 1 : 0
+  name         = "${var.private_hosted_zone}."
+  private_zone = true
+}
