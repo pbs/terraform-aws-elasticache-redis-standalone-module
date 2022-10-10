@@ -7,7 +7,7 @@
 Use this URL for the source of the module. See the usage examples below for more details.
 
 ```hcl
-github.com/pbs/terraform-aws-elasticache-redis-standalone-module?ref=0.0.2
+github.com/pbs/terraform-aws-elasticache-redis-standalone-module?ref=x.y.z
 ```
 
 ### Alternative Installation Methods
@@ -22,11 +22,13 @@ Provisions an Elasticache Redis cluster (with Cluster Mode Disabled).
 
 By default, it will provision one writer and one reader node, but that can be adjusted by setting the `nodes` variable to a different value.
 
+This module also assumes that connections are established through a private DNS record created in Route53. This makes it so that replacement of the ElastiCache cluster can be made in a fashion that is transparent to application configurations. This can be adjusted by setting `create_dns` to `false`.
+
 Integrate this module like so:
 
 ```hcl
 module "elasticache-redis-standalone" {
-  source = "github.com/pbs/terraform-aws-elasticache-redis-standalone-module?ref=0.0.2"
+  source = "github.com/pbs/terraform-aws-elasticache-redis-standalone-module?ref=x.y.z"
 
   # Tagging Parameters
   organization = var.organization
@@ -42,7 +44,7 @@ module "elasticache-redis-standalone" {
 
 If this repo is added as a subtree, then the version of the module should be close to the version shown here:
 
-`0.0.2`
+`x.y.z`
 
 Note, however that subtrees can be altered as desired within repositories.
 
@@ -78,8 +80,11 @@ No modules.
 | [aws_elasticache_parameter_group.parameter_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticache_parameter_group) | resource |
 | [aws_elasticache_replication_group.replication_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticache_replication_group) | resource |
 | [aws_elasticache_subnet_group.subnet_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticache_subnet_group) | resource |
+| [aws_route53_record.primary_endpoint](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record) | resource |
+| [aws_route53_record.reader_endpoint](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record) | resource |
 | [aws_security_group.sg](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
 | [aws_security_group_rule.egress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
+| [aws_route53_zone.private_hosted_zone](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/route53_zone) | data source |
 | [aws_subnets.private_subnets](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnets) | data source |
 | [aws_vpc.vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/vpc) | data source |
 
@@ -96,7 +101,10 @@ No modules.
 | <a name="input_auth_token"></a> [auth\_token](#input\_auth\_token) | Password used to access a password protected server. Can be specified only if transit\_encryption\_enabled = true. | `string` | `null` | no |
 | <a name="input_auto_minor_version_upgrade"></a> [auto\_minor\_version\_upgrade](#input\_auto\_minor\_version\_upgrade) | Specifies whether minor version engine upgrades will be applied automatically to the underlying nodes during the maintenance window. Only supported for engine type "redis" and if the engine version is 6 or higher. | `bool` | `true` | no |
 | <a name="input_automatic_failover_enabled"></a> [automatic\_failover\_enabled](#input\_automatic\_failover\_enabled) | Specifies whether a read-only replica will be automatically promoted to read/write primary if the existing primary fails. If null, will be enabled if `nodes` > 1. If true, `nodes` must be greater than 1. | `bool` | `null` | no |
+| <a name="input_cname"></a> [cname](#input\_cname) | The value to use for the CNAME record if `create_dns` is true. The primary endpoint will be <cname>.<private\_hosted\_zone>, and the reader endpoint will be <cname>-ro.<private\_hosted\_zone>. If null, the name variable will be used instead. | `string` | `null` | no |
+| <a name="input_create_dns"></a> [create\_dns](#input\_create\_dns) | Whether to create DNS records for the primary and reader endpoints. | `bool` | `true` | no |
 | <a name="input_data_tiering_enabled"></a> [data\_tiering\_enabled](#input\_data\_tiering\_enabled) | Enables data tiering. Data tiering is only supported for replication groups using the r6gd node type. This parameter must be set to true when using r6gd nodes. | `bool` | `false` | no |
+| <a name="input_dns_ttl"></a> [dns\_ttl](#input\_dns\_ttl) | TTL for DNS records. | `number` | `300` | no |
 | <a name="input_egress_cidr_blocks"></a> [egress\_cidr\_blocks](#input\_egress\_cidr\_blocks) | List of CIDR blocks to assign to the egress rule of the security group. If null, `egress_security_group_ids` must be used. | `list(string)` | <pre>[<br>  "10.0.0.0/8"<br>]</pre> | no |
 | <a name="input_egress_source_sg_id"></a> [egress\_source\_sg\_id](#input\_egress\_source\_sg\_id) | List of security group ID to assign to the egress rule of the security group. If null, `egress_cidr_blocks` must be used. | `string` | `null` | no |
 | <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | Version number of the cache engine to be used. If not set, defaults to the latest version. See Describe Cache Engine Versions in the AWS Documentation for supported versions. When engine is redis and the version is 6 or higher, the major and minor version can be set, e.g., 6.2, or the minor version can be unspecified which will use the latest version at creation time, e.g., 6.x. Otherwise, specify the full version desired, e.g., 5.0.6. | `string` | `null` | no |
@@ -114,6 +122,7 @@ No modules.
 | <a name="input_parameters"></a> [parameters](#input\_parameters) | Additional parameters that will be added to parameter group. | `list(map(any))` | `[]` | no |
 | <a name="input_port"></a> [port](#input\_port) | The port number on which each of the cache nodes will accept connections. Cannot be provided with replication\_group\_id. Changing this value will re-create the resource. | `number` | `6379` | no |
 | <a name="input_preferred_cache_cluster_azs"></a> [preferred\_cache\_cluster\_azs](#input\_preferred\_cache\_cluster\_azs) | List of availability zones in which to create cluster. | `list(string)` | `null` | no |
+| <a name="input_private_hosted_zone"></a> [private\_hosted\_zone](#input\_private\_hosted\_zone) | Private hosted zone to create DNS records in. If null, `create_dns` must be set to false. | `string` | `null` | no |
 | <a name="input_replication_group_description"></a> [replication\_group\_description](#input\_replication\_group\_description) | Description of the replication group to be created. If null, one will be generated using the name of the nodes. | `string` | `null` | no |
 | <a name="input_replication_group_id"></a> [replication\_group\_id](#input\_replication\_group\_id) | Replication group identifier. This parameter is stored as a lowercase string. If null, the name of the nodes will be used. | `string` | `null` | no |
 | <a name="input_security_group_ids"></a> [security\_group\_ids](#input\_security\_group\_ids) | One or more VPC security groups associated with the nodes. If null, use the one provided by this module. | `list(string)` | `null` | no |
