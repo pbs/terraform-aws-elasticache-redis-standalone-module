@@ -7,7 +7,7 @@
 Use this URL for the source of the module. See the usage examples below for more details.
 
 ```hcl
-github.com/pbs/terraform-aws-elasticache-redis-standalone-module?ref=0.0.4
+github.com/pbs/terraform-aws-elasticache-redis-standalone-module?ref=0.0.5
 ```
 
 ### Alternative Installation Methods
@@ -28,7 +28,7 @@ Integrate this module like so:
 
 ```hcl
 module "elasticache-redis-standalone" {
-  source = "github.com/pbs/terraform-aws-elasticache-redis-standalone-module?ref=0.0.4"
+  source = "github.com/pbs/terraform-aws-elasticache-redis-standalone-module?ref=0.0.5"
 
   # Tagging Parameters
   organization = var.organization
@@ -44,7 +44,7 @@ module "elasticache-redis-standalone" {
 
 If this repo is added as a subtree, then the version of the module should be close to the version shown here:
 
-`0.0.4`
+`0.0.5`
 
 Note, however that subtrees can be altered as desired within repositories.
 
