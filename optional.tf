@@ -210,7 +210,7 @@ variable "global_replication_group_id" {
 
 variable "parameter_group_version" {
   description = "The major + minor version being used for the application when creating a parameter group."
-  default     = "6.x"
+  default     = "7"
   type        = string
 }
 
