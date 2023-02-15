@@ -7,7 +7,7 @@
 Use this URL for the source of the module. See the usage examples below for more details.
 
 ```hcl
-github.com/pbs/terraform-aws-elasticache-redis-standalone-module?ref=0.0.5
+github.com/pbs/terraform-aws-elasticache-redis-standalone-module?ref=x.y.z
 ```
 
 ### Alternative Installation Methods
@@ -28,7 +28,7 @@ Integrate this module like so:
 
 ```hcl
 module "elasticache-redis-standalone" {
-  source = "github.com/pbs/terraform-aws-elasticache-redis-standalone-module?ref=0.0.5"
+  source = "github.com/pbs/terraform-aws-elasticache-redis-standalone-module?ref=x.y.z"
 
   # Tagging Parameters
   organization = var.organization
@@ -44,7 +44,7 @@ module "elasticache-redis-standalone" {
 
 If this repo is added as a subtree, then the version of the module should be close to the version shown here:
 
-`0.0.5`
+`x.y.z`
 
 Note, however that subtrees can be altered as desired within repositories.
 
@@ -77,7 +77,6 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [aws_elasticache_parameter_group.parameter_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticache_parameter_group) | resource |
 | [aws_elasticache_replication_group.replication_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticache_replication_group) | resource |
 | [aws_elasticache_subnet_group.subnet_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticache_subnet_group) | resource |
 | [aws_route53_record.primary_endpoint](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record) | resource |
@@ -118,9 +117,7 @@ No modules.
 | <a name="input_node_type"></a> [node\_type](#input\_node\_type) | ElastiCache node type | `string` | `"cache.t3.micro"` | no |
 | <a name="input_nodes"></a> [nodes](#input\_nodes) | Number of nodes (primary and replicas) this replication group will have. If Multi-AZ is enabled, the value of this parameter must be at least 2. Updates will occur before other modifications. Conflicts with num\_node\_groups, the deprecatednumber\_cache\_clusters, or the deprecated cluster\_mode. | `number` | `2` | no |
 | <a name="input_notification_topic_arn"></a> [notification\_topic\_arn](#input\_notification\_topic\_arn) | ARN of an SNS topic to send ElastiCache notifications to. Example: arn:aws:sns:us-east-1:012345678999:my\_sns\_topic. | `string` | `null` | no |
-| <a name="input_parameter_group_name"></a> [parameter\_group\_name](#input\_parameter\_group\_name) | Name of the parameter group to be created. If null, one will be created using the name of the cluster. | `string` | `null` | no |
-| <a name="input_parameter_group_version"></a> [parameter\_group\_version](#input\_parameter\_group\_version) | The major + minor version being used for the application when creating a parameter group. | `string` | `"7"` | no |
-| <a name="input_parameters"></a> [parameters](#input\_parameters) | Additional parameters that will be added to parameter group. | `list(map(any))` | `[]` | no |
+| <a name="input_parameter_group_name"></a> [parameter\_group\_name](#input\_parameter\_group\_name) | Name of the parameter group to be created. | `string` | `null` | no |
 | <a name="input_port"></a> [port](#input\_port) | The port number on which each of the cache nodes will accept connections. Cannot be provided with replication\_group\_id. Changing this value will re-create the resource. | `number` | `6379` | no |
 | <a name="input_preferred_cache_cluster_azs"></a> [preferred\_cache\_cluster\_azs](#input\_preferred\_cache\_cluster\_azs) | List of availability zones in which to create cluster. | `list(string)` | `null` | no |
 | <a name="input_private_hosted_zone"></a> [private\_hosted\_zone](#input\_private\_hosted\_zone) | Private hosted zone to create DNS records in. If null, `create_dns` must be set to false. | `string` | `null` | no |
