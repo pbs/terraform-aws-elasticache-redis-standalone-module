@@ -1,12 +1,11 @@
 locals {
-  name                 = var.name != null ? var.name : var.product
-  security_group_ids   = var.security_group_ids != null ? var.security_group_ids : [aws_security_group.sg.id]
-  subnet_group_name    = var.subnet_group_name != null ? var.subnet_group_name : aws_elasticache_subnet_group.subnet_group.id
-  vpc_id               = var.vpc_id != null ? var.vpc_id : data.aws_vpc.vpc[0].id
-  subnets              = var.subnets != null ? var.subnets : data.aws_subnets.private_subnets[0].ids
-  parameter_group_name = var.parameter_group_name != null ? var.parameter_group_name : aws_elasticache_parameter_group.parameter_group.id
-  cname                = var.cname != null ? var.cname : "${local.name}-cache"
-  private_hosted_zone  = var.create_dns ? data.aws_route53_zone.private_hosted_zone[0].zone_id : null
+  name                = var.name != null ? var.name : var.product
+  security_group_ids  = var.security_group_ids != null ? var.security_group_ids : [aws_security_group.sg.id]
+  subnet_group_name   = var.subnet_group_name != null ? var.subnet_group_name : aws_elasticache_subnet_group.subnet_group.id
+  vpc_id              = var.vpc_id != null ? var.vpc_id : data.aws_vpc.vpc[0].id
+  subnets             = var.subnets != null ? var.subnets : data.aws_subnets.private_subnets[0].ids
+  cname               = var.cname != null ? var.cname : "${local.name}-cache"
+  private_hosted_zone = var.create_dns ? data.aws_route53_zone.private_hosted_zone[0].zone_id : null
 
   vpc_data_lookup_tags = var.vpc_data_lookup_tags != null ? var.vpc_data_lookup_tags : {
     "environment" : var.environment

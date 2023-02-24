@@ -18,7 +18,7 @@ resource "aws_elasticache_replication_group" "replication_group" {
   node_type                   = var.node_type
   notification_topic_arn      = var.notification_topic_arn
   num_cache_clusters          = var.nodes
-  parameter_group_name        = local.parameter_group_name
+  parameter_group_name        = var.parameter_group_name
   port                        = var.port
   preferred_cache_cluster_azs = var.preferred_cache_cluster_azs
   security_group_ids          = local.security_group_ids
