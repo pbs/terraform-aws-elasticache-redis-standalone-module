@@ -1,6 +1,6 @@
 module github.com/pbs/terraform-aws-elasticache-redis-standalone-module
 
-go 1.13
+go 1.20
 
 require (
 	cloud.google.com/go/compute/metadata v0.2.3 // indirect

@@ -4,3 +4,4 @@ target
 CHANGELOG.md
 *tfstate*
 *.zip
+*.tfstate.backup

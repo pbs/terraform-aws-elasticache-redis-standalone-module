@@ -11,7 +11,7 @@ All the techniques for installing modules are based around the ways that Terrafo
 Assuming you don't have manual modifications that you need to make to serve the purposes of an application, the most convenient method of integrating modules might be by using the repo source of this module like so:
 
 ```hcl
-module "elasticache-redis-standalone" {
+module "redis" {
     source = "github.com/pbs/terraform-elasticache-redis-standalone-module?ref=x.y.z"
 }
 ```
