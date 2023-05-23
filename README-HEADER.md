@@ -27,7 +27,7 @@ This module also assumes that connections are established through a private DNS 
 Integrate this module like so:
 
 ```hcl
-module "elasticache-redis-standalone" {
+module "redis" {
   source = "github.com/pbs/terraform-aws-elasticache-redis-standalone-module?ref=x.y.z"
 
   # Tagging Parameters
