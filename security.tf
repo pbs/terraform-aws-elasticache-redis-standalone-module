@@ -2,7 +2,7 @@ resource "aws_security_group" "sg" {
   description = "Controls access to the ${local.name} redis cluster"
 
   name        = local.sg_name
-  name_prefix = local.sg_name_prefix
+  name_prefix = "${local.name}-redis-sg"
   vpc_id      = local.vpc_id
 
   tags = local.tags
