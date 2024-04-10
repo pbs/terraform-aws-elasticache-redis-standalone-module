@@ -1,11 +1,15 @@
 locals {
   name                = var.name != null ? var.name : var.product
+  service_name        = var.service_name != null ? var.service_name : local.name
   security_group_ids  = var.security_group_ids != null ? var.security_group_ids : [aws_security_group.sg.id]
   subnet_group_name   = var.subnet_group_name != null ? var.subnet_group_name : aws_elasticache_subnet_group.subnet_group.id
   vpc_id              = var.vpc_id != null ? var.vpc_id : data.aws_vpc.vpc[0].id
   subnets             = var.subnets != null ? var.subnets : data.aws_subnets.private_subnets[0].ids
   cname               = var.cname != null ? var.cname : "${local.name}-cache"
   private_hosted_zone = var.create_dns ? data.aws_route53_zone.private_hosted_zone[0].zone_id : null
+
+  log_destination  = var.log_destination != null ? var.log_destination : "/ecs/${local.service_name}"
+  create_log_group = var.log_destination == null ? var.create_log_group : false
 
   vpc_data_lookup_tags = var.vpc_data_lookup_tags != null ? var.vpc_data_lookup_tags : {
     "environment" : var.environment
