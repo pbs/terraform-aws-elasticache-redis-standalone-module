@@ -30,12 +30,12 @@ resource "aws_elasticache_replication_group" "replication_group" {
   user_group_ids              = var.user_group_ids
 
   dynamic "log_delivery_configuration" {
-    for_each = local.create_log_group ? [1] : []
+    for_each = var.log_delivery_configurations
     content {
-      destination      = local.log_destination
-      destination_type = var.log_destination_type
-      log_format       = var.log_format
-      log_type         = var.log_type
+      destination      = log_delivery_configuration.value.destination
+      destination_type = log_delivery_configuration.value.destination_type
+      log_format       = log_delivery_configuration.value.log_format
+      log_type         = log_delivery_configuration.value.log_type
     }
   }
 
