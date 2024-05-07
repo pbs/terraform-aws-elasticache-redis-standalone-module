@@ -7,7 +7,7 @@
 Use this URL for the source of the module. See the usage examples below for more details.
 
 ```hcl
-github.com/pbs/terraform-aws-elasticache-redis-standalone-module?ref=1.0.25
+github.com/pbs/terraform-aws-elasticache-redis-standalone-module?ref=x.y.z
 ```
 
 ### Alternative Installation Methods
@@ -28,7 +28,7 @@ Integrate this module like so:
 
 ```hcl
 module "redis" {
-  source = "github.com/pbs/terraform-aws-elasticache-redis-standalone-module?ref=1.0.25"
+  source = "github.com/pbs/terraform-aws-elasticache-redis-standalone-module?ref=x.y.z"
 
   # Tagging Parameters
   organization = var.organization
@@ -44,7 +44,7 @@ module "redis" {
 
 If this repo is added as a subtree, then the version of the module should be close to the version shown here:
 
-`1.0.25`
+`x.y.z`
 
 Note, however that subtrees can be altered as desired within repositories.
 
@@ -77,7 +77,6 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [aws_cloudwatch_log_group.logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_elasticache_replication_group.replication_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticache_replication_group) | resource |
 | [aws_elasticache_subnet_group.subnet_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticache_subnet_group) | resource |
 | [aws_route53_record.primary_endpoint](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record) | resource |
@@ -104,7 +103,6 @@ No modules.
 | <a name="input_automatic_failover_enabled"></a> [automatic\_failover\_enabled](#input\_automatic\_failover\_enabled) | Specifies whether a read-only replica will be automatically promoted to read/write primary if the existing primary fails. If null, will be enabled if `nodes` > 1. If true, `nodes` must be greater than 1. | `bool` | `null` | no |
 | <a name="input_cname"></a> [cname](#input\_cname) | The value to use for the CNAME record if `create_dns` is true. The primary endpoint will be <cname>.<private\_hosted\_zone>, and the reader endpoint will be <cname>-ro.<private\_hosted\_zone>. If null, the name variable will be used instead. | `string` | `null` | no |
 | <a name="input_create_dns"></a> [create\_dns](#input\_create\_dns) | Whether to create DNS records for the primary and reader endpoints. | `bool` | `true` | no |
-| <a name="input_create_log_group"></a> [create\_log\_group](#input\_create\_log\_group) | Flag for creating a CloudWatch log group. | `bool` | `false` | no |
 | <a name="input_data_tiering_enabled"></a> [data\_tiering\_enabled](#input\_data\_tiering\_enabled) | Enables data tiering. Data tiering is only supported for replication groups using the r6gd node type. This parameter must be set to true when using r6gd nodes. | `bool` | `false` | no |
 | <a name="input_dns_ttl"></a> [dns\_ttl](#input\_dns\_ttl) | TTL for DNS records. | `number` | `300` | no |
 | <a name="input_egress_cidr_blocks"></a> [egress\_cidr\_blocks](#input\_egress\_cidr\_blocks) | List of CIDR blocks to assign to the egress rule of the security group. If null, `egress_security_group_ids` must be used. | `list(string)` | <pre>[<br>  "10.0.0.0/8"<br>]</pre> | no |
@@ -113,11 +111,7 @@ No modules.
 | <a name="input_final_snapshot_identifier"></a> [final\_snapshot\_identifier](#input\_final\_snapshot\_identifier) | Name of your final cluster snapshot. If omitted, no final snapshot will be made. | `string` | `null` | no |
 | <a name="input_global_replication_group_id"></a> [global\_replication\_group\_id](#input\_global\_replication\_group\_id) | The ID of the global replication group to which this replication group should belong. If this parameter is specified, the replication group is added to the specified global replication group as a secondary replication group; otherwise, the replication group is not part of any global replication group. If global\_replication\_group\_id is set, the num\_node\_groups parameter cannot be set. | `string` | `null` | no |
 | <a name="input_kms_key_id"></a> [kms\_key\_id](#input\_kms\_key\_id) | The ARN of the key that you wish to use if encrypting at rest. If not supplied, uses service managed encryption. Can be specified only if at\_rest\_encryption\_enabled = true. | `string` | `null` | no |
-| <a name="input_log_destination"></a> [log\_destination](#input\_log\_destination) | Name of externally created CloudWatch Logs LogGroup or Kinesis Data Firehose resource. If any specified, create\_log\_group will be ignored. | `string` | `null` | no |
-| <a name="input_log_destination_type"></a> [log\_destination\_type](#input\_log\_destination\_type) | For CloudWatch Logs use cloudwatch-logs or for Kinesis Data Firehose use kinesis-firehose. | `string` | `"cloudwatch-logs"` | no |
-| <a name="input_log_format"></a> [log\_format](#input\_log\_format) | Log format with valid values of json or text. | `string` | `"text"` | no |
-| <a name="input_log_group_class"></a> [log\_group\_class](#input\_log\_group\_class) | Log class of the log group. Possible values are: STANDARD or INFREQUENT\_ACCESS. | `string` | `"INFREQUENT_ACCESS"` | no |
-| <a name="input_log_type"></a> [log\_type](#input\_log\_type) | Log type with valid values of slow-log or engine-log. | `string` | `"slow-log"` | no |
+| <a name="input_log_delivery_configurations"></a> [log\_delivery\_configurations](#input\_log\_delivery\_configurations) | List of log delivery configurations. https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticache_cluster#log-delivery-configuration | <pre>list(object({<br>    destination = string<br>    destination_type = string<br>    log_format = string<br>    log_type = string<br>  }))</pre> | `[]` | no |
 | <a name="input_maintenance_window"></a> [maintenance\_window](#input\_maintenance\_window) | Specifies the weekly time range for when maintenance on the cluster is performed. The format is ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period. Example: sun:05:00-sun:09:00. | `string` | `"mon:07:00-mon:08:00"` | no |
 | <a name="input_multi_az_enabled"></a> [multi\_az\_enabled](#input\_multi\_az\_enabled) | Whether to enable Multi-AZ. If Multi-AZ is enabled, the value of nodes must be at least 2. | `bool` | `false` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the ElastiCache Redis instance. If null, will default to product. | `string` | `null` | no |
@@ -130,9 +124,7 @@ No modules.
 | <a name="input_private_hosted_zone"></a> [private\_hosted\_zone](#input\_private\_hosted\_zone) | Private hosted zone to create DNS records in. If null, `create_dns` must be set to false. | `string` | `null` | no |
 | <a name="input_replication_group_description"></a> [replication\_group\_description](#input\_replication\_group\_description) | Description of the replication group to be created. If null, one will be generated using the name of the nodes. | `string` | `null` | no |
 | <a name="input_replication_group_id"></a> [replication\_group\_id](#input\_replication\_group\_id) | Replication group identifier. This parameter is stored as a lowercase string. If null, the name of the nodes will be used. | `string` | `null` | no |
-| <a name="input_retention_in_days"></a> [retention\_in\_days](#input\_retention\_in\_days) | Log retention in days | `number` | `7` | no |
 | <a name="input_security_group_ids"></a> [security\_group\_ids](#input\_security\_group\_ids) | One or more VPC security groups associated with the nodes. If null, use the one provided by this module. | `list(string)` | `null` | no |
-| <a name="input_service_name"></a> [service\_name](#input\_service\_name) | Name of the service running this task. Only important here because the AWS console defaults to `/ecs/service_name` when displaying logs for a service | `string` | `null` | no |
 | <a name="input_sg_name"></a> [sg\_name](#input\_sg\_name) | Name of the security group to be created. If null, will use the name of the nodes. | `string` | `null` | no |
 | <a name="input_snapshot_arns"></a> [snapshot\_arns](#input\_snapshot\_arns) | Single-element string list containing an Amazon Resource Name (ARN) of a Redis RDB snapshot file stored in Amazon S3. The object name cannot contain any commas. Changing snapshot\_arns forces a new resource. | `list(string)` | `null` | no |
 | <a name="input_snapshot_retention_limit"></a> [snapshot\_retention\_limit](#input\_snapshot\_retention\_limit) | Number of days for which ElastiCache will retain automatic cluster snapshots before deleting them. For example, if you set SnapshotRetentionLimit to 5, then a snapshot that was taken today will be retained for 5 days before being deleted. If the value of SnapshotRetentionLimit is set to zero (0), backups are turned off. Please note that setting a snapshot\_retention\_limit is not supported on cache.t1.micro cache nodes. | `number` | `null` | no |
