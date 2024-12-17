@@ -8,7 +8,7 @@ resource "aws_elasticache_replication_group" "replication_group" {
   auto_minor_version_upgrade  = var.auto_minor_version_upgrade
   automatic_failover_enabled  = local.automatic_failover_enabled
   data_tiering_enabled        = var.data_tiering_enabled
-  engine                      = local.engine
+  engine                      = var.engine
   engine_version              = var.engine_version
   final_snapshot_identifier   = var.final_snapshot_identifier
   global_replication_group_id = var.global_replication_group_id
