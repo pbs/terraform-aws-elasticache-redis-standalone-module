@@ -22,6 +22,16 @@ variable "auto_minor_version_upgrade" {
   type        = bool
 }
 
+variable "engine" {
+  description = "The engine to use ('valkey' or 'redis')"
+  default     = "redis"
+  type        = string
+  validation {
+    condition     = contains(["redis", "valkey"], var.engine)
+    error_message = "Engine must be 'redis' or 'valkey'"
+  }
+}
+
 variable "engine_version" {
   description = "Version number of the cache engine to be used. If not set, defaults to the latest version. See Describe Cache Engine Versions in the AWS Documentation for supported versions. When engine is redis and the version is 6 or higher, the major and minor version can be set, e.g., 6.2, or the minor version can be unspecified which will use the latest version at creation time, e.g., 6.x. Otherwise, specify the full version desired, e.g., 5.0.6."
   default     = null

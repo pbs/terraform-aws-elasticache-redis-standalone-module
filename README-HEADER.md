@@ -16,7 +16,7 @@ More information can be found on these install methods and more in [the document
 
 ## Usage
 
-Provisions an Elasticache Redis cluster (with Cluster Mode Disabled).
+Provisions an Elasticache Redis (or Valkey) cluster (with Cluster Mode Disabled).
 
 > ℹ️ Note the confusing terminology around `Cluster Mode`. The `Cluster Mode` setting is a Redis feature that allows data to be sharded among nodes in a cluster, and requires some additional configuration to connect with it correctly. A Redis cluster that does not have `Cluster Mode` enabled is a set of standalone Redis nodes that have a single primary node for reading and writing and replica nodes for reading.
 

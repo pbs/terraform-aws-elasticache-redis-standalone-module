@@ -24,8 +24,6 @@ locals {
 
   automatic_failover_enabled = var.automatic_failover_enabled != null ? var.automatic_failover_enabled : var.nodes >= 2
 
-  engine = "redis"
-
   creator = "terraform"
 
   defaulted_tags = merge(
